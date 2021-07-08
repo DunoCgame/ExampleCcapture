@@ -1,0 +1,101 @@
+<html>
+<head>
+	<style>
+	#canvas{
+		border:1px solid black;
+
+	}
+	</style>
+</head>
+	<body>
+	
+		<button id="start"onclick="start()">start</button>
+		<button id="stop" onclick="stop()">stop</button>
+		<button id="save" onclick="save()">save</button>
+
+	<script src="https://cdn.jsdelivr.net/npm/p5@1.2.0/lib/p5.min.js"></script>
+    <script src="https://unpkg.com/ccapture.js@1.1.0/build/CCapture.all.min.js"></script>
+	<script src="javascripts/gif.worker.js"></script>
+<script>
+<!-- https://github.com/pbeshai/p5js-ccapture/blob/master/index.html -->
+<!-- https://github.com/spite/ccapture.js -->
+
+let canvas = document.getElementById("defaultCanvas0");
+let Images = document.getElementById("MyImagen").src;
+
+let PosX = 10;
+let PosY = 10;
+let SpeedX = 15;
+let SpeedY = 15;
+let Imagen = "IMG.png";
+let fps = 60;
+
+
+var capturer = new CCapture( 
+		{ 
+			format: 'gif', 
+			framerate:fps, 
+			<!-- verbose:true, -->
+			workersPath:'js/'
+		} 	
+
+		<!-- {  -->
+			<!-- format: 'webm',  -->
+			<!-- framerate:fps,  -->
+			<!-- verbose:true -->
+		<!-- }  -->
+		
+		<!-- {  -->
+			<!-- format: 'png',  -->
+			<!-- framerate: fps	 -->
+				
+		<!-- } -->
+);
+
+// the canvas capturer instance
+
+let img;
+// setup the drawing
+function setup() {
+	createCanvas(600, 600);
+	img = loadImage(Images); // Cargar la imagen
+
+}
+
+// draw
+var startMillis; // needed to subtract initial millis before first draw to begin at t=0.
+function draw() {
+		background(0);
+		noStroke();
+	 
+<!-- console.log(frameCount); -->
+
+	  if(frameCount === 1){
+			capturer.start();
+	  }
+
+//object
+
+image(img, PosX, PosY, 40, 40);
+
+		if(PosX<=0 || PosX+40>=600){
+					SpeedX*=-1;					
+			}
+			
+			if(PosY<=0 || PosY+40>=600){
+					SpeedY*=-1;							
+			}
+	
+
+  capturer.capture(document.getElementById('defaultCanvas0'));
+}
+
+function stop(){
+    noLoop();
+    console.log('finished recording.');
+    capturer.stop();
+    capturer.save();
+    return;
+}
+</script>
+</body>

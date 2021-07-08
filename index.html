@@ -1,0 +1,138 @@
+<html>
+<head>
+	<style>
+	#canvas{
+		border:1px solid black;
+
+	}
+	</style>
+</head>
+	<body>
+		<canvas id="canvas" width="1000" height="450"> </canvas>
+		<button id="start"onclick="start()">start</button>
+		<!-- <button id="stop" onclick="stop()">stop</button> -->
+		<button id="save" onclick="save()">save</button>
+		
+		<img  id="MyImagen" src="asset/IMG.jpg" >
+		
+		<img id="source" src="https://mdn.mozillademos.org/files/5397/rhino.jpg" width="300" height="227">
+	
+	
+	<!-- <script src="https://cdn.jsdelivr.net/npm/p5@1.2.0/lib/p5.min.js"></script> -->
+    <script src="https://unpkg.com/ccapture.js@1.1.0/build/CCapture.all.min.js"></script>
+	<!-- <script src="CCapture.all.min.js"></script> -->
+<script>
+
+let canvas = document.getElementById("canvas");
+var ctx = canvas.getContext("2d");
+
+let Images = document.getElementById("MyImagen");
+
+var images = document.getElementById('source');
+
+
+console.log(Images);
+
+let PosX = 10;
+let PosY = 10;
+let SpeedX = 15;
+let SpeedY = 15;
+let Imagen = "IMG.png";
+let fps = 60;
+
+<!-- https://github.com/spite/ccapture.js -->
+
+<!-- var capturer = new CCapture( { format: 'gif', workersPath: 'js/' } ); -->
+
+// the canvas capturer instance
+var capturer = new CCapture({ format: 'png', framerate: fps });
+
+	let counter=0;
+	let contador=true;
+	
+	function start(){
+			capturer.start(); 
+	
+	}
+	
+function Pain(){
+
+	<!-- if(contador==true){ -->
+		<!-- counter++; -->
+	<!-- } -->
+		<!-- console.log(counter); -->
+		
+				<!-- if(counter===10){ -->
+				
+					<!-- capturer.start(); -->
+					<!-- counter=0; -->
+					<!-- contador=false; -->
+					
+			<!-- } -->
+
+
+	ctx.save();
+	ctx.fillStyle = "green";
+	ctx.fillRect(0, 0, canvas.width, canvas.height);
+	ctx.restore();
+				
+	ctx.save();
+	ctx.fillStyle = "#FF0000";
+	ctx.fillRect(PosX+20, PosY+20, 40, 40);
+	ctx.restore();
+	
+
+
+	<!-- ctx.drawImage(images, 33, 71, 104, 124, 21, 20, 87, 104); -->
+	
+	<!-- ctx.drawImage(Images, PosX+20, PosY+20 , 40, 40); -->
+	
+					ctx.save();
+					var img = new Image();
+					img.src = "asset/IMG.jpg";
+					ctx.drawImage(img, PosX, PosY, 100, 100);
+					ctx.restore();
+	
+	
+		PosX+=SpeedX;	
+		PosY+=SpeedY;	
+	
+		if(PosX<=0 || PosX+40>=canvas.width){
+					SpeedX*=-1;					
+			}
+			
+			if(PosY<=0 || PosY+40>=canvas.height){
+					SpeedY*=-1;							
+			}
+}
+
+var requestId;
+
+function render(){
+
+	requestAnimationFrame(render);
+	// rendering stuff ...
+	
+	Pain();
+	<!-- capturer.capture(document.getElementById("canvas").toDataURL()); -->
+	
+	<!-- console.log(document.getElementById("canvas").toDataURL()); -->
+	capturer.capture(document.getElementById("canvas")); //esta funciona
+	
+}
+
+render()
+
+
+
+	function save(){
+			  window.cancelAnimationFrame(requestId);
+			console.log('finished recording.');
+			capturer.stop();
+			capturer.save();
+			return;
+	}
+   
+ 
+</script>
+</body>
